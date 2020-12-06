@@ -8,6 +8,7 @@ public class DIYArrayList<E> implements List<E> {
   private int size = 0;
   private Object[] elements;
   private static final int DEFAULT_SIZE = 10;
+  private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 
   public DIYArrayList() {
     elements = new Object[DEFAULT_SIZE];
@@ -64,11 +65,38 @@ public class DIYArrayList<E> implements List<E> {
 
   @Override
   public boolean add(E e) {
-    Integer newSize = size + 1;
-    elements = Arrays.copyOf(elements, newSize);
+    if (size == elements.length) {
+      elements = grow();
+    }
     elements[size] = e;
     size++;
     return true;
+  }
+
+  private Object[] grow() {
+    return Arrays.copyOf(elements, newCapacity(size + 1));
+  }
+
+  private int newCapacity(int minCapacity) {
+    int oldCapacity = elements.length;
+    int newCapacity = oldCapacity + (oldCapacity >> 1);
+    if (newCapacity - minCapacity <= 0) {
+      if (oldCapacity == 0) {
+        return Math.max(DEFAULT_SIZE, minCapacity);
+      }
+      if (minCapacity < 0) {
+        throw new OutOfMemoryError();
+      }
+      return minCapacity;
+    }
+    return (newCapacity - MAX_ARRAY_SIZE <= 0) ? newCapacity : hugeCapacity(minCapacity);
+  }
+
+  private static int hugeCapacity(int minCapacity) {
+    if (minCapacity < 0) {
+      throw new OutOfMemoryError();
+    }
+    return (minCapacity > MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE;
   }
 
   @Override
