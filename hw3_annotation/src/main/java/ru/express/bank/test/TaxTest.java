@@ -39,7 +39,7 @@ public class TaxTest {
         }
         catch (Exception ex)
         {
-
+            throw new ArithmeticException("Ошибка создания тестовых данных");
         }
     }
 

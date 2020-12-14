@@ -37,20 +37,32 @@ public class AnnotationAnalyzer {
             {
                 var obj = clazz.getDeclaredConstructor().newInstance();
 
+                boolean isError = false;
+
                 for (Method method : beforList) {
-                    method.invoke(obj);
+                    try {
+                        method.invoke(obj);
+                    } catch (InvocationTargetException ex) {
+                        isError = true;
+                        fail++;
+                        failInfo.put(method.getName(), ex.getTargetException().getMessage());
+                    }
                 }
 
-                try {
-                    testMethod.invoke(obj);
-                    pass++;
-                } catch (InvocationTargetException ex) {
-                    fail++;
-                    failInfo.put(testMethod.getName(), ex.getTargetException().getMessage());
+                if (!isError) {
+                    try {
+                        testMethod.invoke(obj);
+                        pass++;
+                    } catch (InvocationTargetException ex) {
+                        fail++;
+                        failInfo.put(testMethod.getName(), ex.getTargetException().getMessage());
+                    }
                 }
 
                 for (Method method : afterList) {
+                    try {
                     method.invoke(obj);
+                    } catch (InvocationTargetException ex) { }
                 }
             }
         }
