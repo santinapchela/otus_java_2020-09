@@ -2,3 +2,5 @@ rootProject.name = 'otus_java_2020-09'
 include 'hw1_gradle'
 include 'hw2_collections'
 include 'hw3_annotation'
+include 'hw5_byteCode'
+
