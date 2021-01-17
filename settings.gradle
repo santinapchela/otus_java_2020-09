@@ -3,4 +3,5 @@ include 'hw1_gradle'
 include 'hw2_collections'
 include 'hw3_annotation'
 include 'hw5_byteCode'
+include 'hw6_ATM'
 
