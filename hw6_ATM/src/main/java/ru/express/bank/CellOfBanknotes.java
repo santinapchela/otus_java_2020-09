@@ -1,5 +1,6 @@
 package ru.express.bank;
 
+import ru.express.bank.exception.YouWantToManyMoneyException;
 import ru.express.bank.interfaces.Cell;
 
 public class CellOfBanknotes implements Cell {
@@ -7,7 +8,7 @@ public class CellOfBanknotes implements Cell {
     // Кол-во банкнот в ячейке
     private int quantity;
     // Номинал банкнот в ячейке
-    private Banknote banknote;
+    private final Banknote banknote;
 
     public CellOfBanknotes(int quantity, Banknote banknote)
     {
@@ -34,10 +35,9 @@ public class CellOfBanknotes implements Cell {
     }
 
     @Override
-    public void getBanknotes(int quantity)
-    {
+    public void getBanknotes(int quantity) throws YouWantToManyMoneyException {
         if (quantity < 0 || this.quantity < quantity) {
-            throw new IllegalArgumentException();
+            throw new YouWantToManyMoneyException();
         }
         else {
             this.quantity -= quantity;
